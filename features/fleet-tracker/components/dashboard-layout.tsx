@@ -21,7 +21,6 @@ const DashboardLayout = ({ className }: DashboardLayoutProps) => {
     { icon: Home, label: "Home", href: "/dashboard", active: true },
     { icon: Route, label: "Routes", href: "/routes" },
     { icon: FileText, label: "Reports", href: "/reports" },
-    { icon: LogOut, label: "Logout", href: "/logout" },
   ]
 
   return (
@@ -38,6 +37,7 @@ const DashboardLayout = ({ className }: DashboardLayoutProps) => {
         transform transition-transform duration-300 ease-in-out
         ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
         lg:translate-x-0 lg:relative lg:z-auto lg:flex-shrink-0
+        flex flex-col
       `}
       >
         <div className="flex items-center justify-between p-6 border-b border-[#8b5cf6]">
@@ -52,7 +52,7 @@ const DashboardLayout = ({ className }: DashboardLayoutProps) => {
           </Button>
         </div>
 
-        <nav className="p-4 space-y-2">
+        <nav className="p-4 space-y-2 flex-1">
           {navigationItems.map((item) => (
             <Button
               key={item.label}
@@ -68,14 +68,19 @@ const DashboardLayout = ({ className }: DashboardLayoutProps) => {
           ))}
         </nav>
 
-        <div className="absolute bottom-4 left-4 right-4">
+        <div className="p-4 border-t border-[#8b5cf6] space-y-2">
           <Button
             variant="ghost"
-            className="w-full justify-start text-white hover:bg-[#5b21b6]"
+            size="sm"
+            className="w-full justify-center text-white hover:bg-[#5b21b6] p-2"
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
           >
-            {theme === "dark" ? <Sun className="mr-3 h-5 w-5" /> : <Moon className="mr-3 h-5 w-5" />}
-            {theme === "dark" ? "Light Mode" : "Dark Mode"}
+            {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+          </Button>
+
+          <Button variant="ghost" className="w-full justify-start text-white hover:bg-[#5b21b6]">
+            <LogOut className="mr-3 h-5 w-5" />
+            Logout
           </Button>
         </div>
       </aside>
