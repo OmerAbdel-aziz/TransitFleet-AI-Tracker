@@ -1,9 +1,8 @@
-import { Server } from "socket.io"
-import { NextRequest } from "next/server"
+// app/api/socket/route.ts
+import { Server } from "socket.io";
+import { fetchMbtaBuses } from "@/lib/fetchMbta";
 
-
-export const GET = async (req:NextRequest) =>{
-    
+export const GET = async () => {
   if (!(global as any).io) {
     console.log("🔌 Starting Socket.io server...");
 
@@ -12,22 +11,23 @@ export const GET = async (req:NextRequest) =>{
       path: "/api/socket",
     });
 
+    (global as any).io = io;
+
     io.on("connection", (socket) => {
       console.log("✅ Client connected:", socket.id);
-
-      socket.on("ping", (msg) => {
-        console.log("📩 Ping received:", msg);
-        socket.emit("pong", "Hello from server!");
-      });
-
-      socket.on("disconnect", () => {
-        console.log("❌ Client disconnected:", socket.id);
-      });
     });
 
-    (global as any).io = io;
+    // Fetch MBTA buses every 10s
+   setInterval(async () => {
+  try {
+    const buses = await fetchMbtaBuses(["1", "66", "15"]); // multiple routes
+    io.emit("busUpdate", buses);
+  } catch (err) {
+    console.error("MBTA fetch failed:", err);
+  }
+}, 10000);
+
   }
 
   return new Response("Socket.IO server running", { status: 200 });
-
-}
+};

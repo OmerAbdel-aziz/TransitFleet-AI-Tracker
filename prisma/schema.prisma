@@ -1,9 +1,6 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
-  output   = "../lib/generated/prisma"
+ 
 }
 
 datasource db {
@@ -11,12 +8,15 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+
+
 model BusHistory {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(cuid())
   busId     String
   route     String
-  lat       Float
-  lng       Float
-  delay     Int?
+  lat       Float?
+  lng       Float?
+  eta       DateTime
+  delay     Int
   createdAt DateTime @default(now())
 }

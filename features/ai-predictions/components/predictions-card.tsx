@@ -115,9 +115,9 @@ export function PredictionCard({ className }: PredictionCardProps) {
                     <Badge className={getSeverityColor(prediction.severity)}>{prediction.confidence}% confidence</Badge>
                   </div>
                   <p className="text-gray-700 dark:text-gray-300 mb-2">{prediction.message}</p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                  {/* <p className="text-xs text-gray-500 dark:text-gray-400">
                     {prediction.timestamp.toLocaleTimeString()}
-                  </p>
+                  </p> */}
                 </div>
               )
             })}

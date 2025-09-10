@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button"
 import { LogOut, Menu, X, Sun, Moon } from "lucide-react"
 import { navigation } from "@/config/navigation"
 import Link from "next/link"
+import { useBusSocket } from "../hooks/useBusSocket"
 
 interface DashboardLayoutProps {
   children?: React.ReactNode
@@ -17,6 +18,7 @@ interface DashboardLayoutProps {
 const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const { theme, setTheme } = useTheme()
+  const buses = useBusSocket()
 
   return (
     <div className="min-h-screen bg-background">
@@ -96,7 +98,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
             </p>
           </div>
 
-          <MapView />
+          <MapView buses={buses}/>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2">
