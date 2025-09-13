@@ -31,6 +31,7 @@ interface TflBus {
   lng: number
   route: string
   status: "on-time" | "delayed" | "early"
+  delay: number
 }
 
 interface MapViewProps {
@@ -302,7 +303,7 @@ export function MapView({ buses = [], className }: MapViewProps) {
         </div>
 
         {/* Control panel */}
-        <div className="absolute top-4 right-4 bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden z-[1000]">
+        {/* <div className="absolute top-4 right-4 bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden z-[1000]">
           <div className="flex items-center justify-between p-2 border-b bg-[#f3f4f6] dark:bg-[#4c1d95]">
             <span className="text-xs font-medium text-gray-600 dark:text-gray-300">Controls</span>
             <Button
@@ -318,7 +319,7 @@ export function MapView({ buses = [], className }: MapViewProps) {
           {!controlPanelMinimized && (
             <div className="p-3 space-y-2">
               <div className="flex flex-col space-y-2">
-                {/* Zoom controls */}
+               
                 <div className="flex space-x-1">
                   <Button size="sm" className="bg-[#6939db] hover:bg-[#5b21b6] text-white">
                     <ZoomIn className="h-4 w-4" />
@@ -328,7 +329,7 @@ export function MapView({ buses = [], className }: MapViewProps) {
                   </Button>
                 </div>
 
-                {/* Filter controls */}
+            
                 <div className="border-t pt-2">
                   <p className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-2">Filter by:</p>
                   <div className="space-y-1">
@@ -358,7 +359,7 @@ export function MapView({ buses = [], className }: MapViewProps) {
                   </div>
                 </div>
 
-                {/* Debug toggle (development only) */}
+         
                 {process.env.NODE_ENV === 'development' && (
                   <div className="border-t pt-2">
                     <Button
@@ -374,7 +375,7 @@ export function MapView({ buses = [], className }: MapViewProps) {
               </div>
             </div>
           )}
-        </div>
+        </div> */}
 
         {/* Legend */}
         <div className="absolute bottom-4 left-4 bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden z-[1000]">
@@ -397,19 +398,19 @@ export function MapView({ buses = [], className }: MapViewProps) {
                 <div className="flex items-center space-x-2">
                   <div className="w-3 h-3 bg-green-500 rounded-full"></div>
                   <span className="text-xs text-gray-600 dark:text-gray-400">
-                    On Time ({validBuses.filter(b => b.status === 'on-time').length})
+                    On Time ({validBuses.filter(b => b.delay === 0).length})
                   </span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <div className="w-3 h-3 bg-red-500 rounded-full"></div>
                   <span className="text-xs text-gray-600 dark:text-gray-400">
-                    Delayed ({validBuses.filter(b => b.status === 'delayed').length})
+                    Delayed ({validBuses.filter(b => b.delay > 0).length})
                   </span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
                   <span className="text-xs text-gray-600 dark:text-gray-400">
-                    Early ({validBuses.filter(b => b.status === 'early').length})
+                    Early ({validBuses.filter(b => b.delay < 0 ).length})
                   </span>
                 </div>
               </div>

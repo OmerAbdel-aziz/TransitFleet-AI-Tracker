@@ -10,6 +10,7 @@ interface Bus {
   lng: number
   route: string
   status: "on-time" | "delayed" | "early"
+  delay: number
 }
 
 export function useBusSocket() {

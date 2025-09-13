@@ -1,38 +1,37 @@
-import type React from "react"
-import type { Metadata } from "next"
-import { Inter, Roboto_Mono } from "next/font/google"
-import { Analytics } from "@vercel/analytics/react"
-import { ThemeProvider } from "@/components/shared/theme-provider"
-import { Suspense } from "react"
-import "./globals.css"
+import type React from "react";
+import type { Metadata } from "next";
+import { Inter, Roboto_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/react";
+import { ThemeProvider } from "@/components/shared/theme-provider";
+import { Suspense } from "react";
+import "./globals.css";
 import {
   ClerkProvider,
   SignedIn,
   SignedOut,
   RedirectToSignIn,
-} from "@clerk/nextjs"
+} from "@clerk/nextjs";
 
-// Fonts
 const geistSans = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
-})
+});
 
 const geistMono = Roboto_Mono({
   subsets: ["latin"],
   variable: "--font-mono",
-})
+});
 
 export const metadata: Metadata = {
   title: "TransitFleet AI Tracker",
   description: "Real-time public transit fleet dashboard with AI-driven predictions",
   generator: "v0.app",
-}
+};
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode
+  children: React.ReactNode;
 }>) {
   return (
     <ClerkProvider>
@@ -47,12 +46,9 @@ export default function RootLayout({
               enableSystem
               disableTransitionOnChange
             >
-              {/* Force auth here */}
-              <SignedIn>
-                {children}
-              </SignedIn>
+              <SignedIn>{children}</SignedIn>
               <SignedOut>
-                <RedirectToSignIn />
+                <RedirectToSignIn redirectUrl="/sign-in" />
               </SignedOut>
             </ThemeProvider>
             <Analytics />
@@ -60,5 +56,5 @@ export default function RootLayout({
         </body>
       </html>
     </ClerkProvider>
-  )
+  );
 }

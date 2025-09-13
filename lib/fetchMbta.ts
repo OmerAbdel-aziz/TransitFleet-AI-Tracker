@@ -1,9 +1,16 @@
-let lastGoodData: any[] = [];
+import { NormalizedBus } from "@/features/fleet-tracker";
 
-export async function fetchMbtaBuses(routes?: string[] | string) {
+
+
+export async function fetchMbtaBuses(routes?: string[] | string): Promise<NormalizedBus[]> {
+  // Default route if nothing passed
   let routeFilter = "1";
-  if (Array.isArray(routes)) routeFilter = routes.join(",");
-  else if (typeof routes === "string") routeFilter = routes;
+
+  if (Array.isArray(routes)) {
+    routeFilter = routes.join(","); // e.g. "1,66,15"
+  } else if (typeof routes === "string") {
+    routeFilter = routes;
+  }
 
   const url = `https://api-v3.mbta.com/vehicles?filter[route]=${routeFilter}&filter[route_type]=3`;
 
@@ -14,20 +21,19 @@ export async function fetchMbtaBuses(routes?: string[] | string) {
   });
 
   if (!res.ok) {
-    console.warn(`⚠️ MBTA fetch failed (${res.status}), using cached data`);
-    return lastGoodData;
+    throw new Error(`MBTA API failed: ${res.status}`);
   }
 
   const json = await res.json();
-  lastGoodData = json.data.map((v: any) => ({
+
+  return json.data.map((v: any): NormalizedBus => ({
     id: v.id,
     route: v.relationships.route.data?.id || "unknown",
-    lat: v.attributes.latitude,
-    lng: v.attributes.longitude,
-    speed: v.attributes.speed,
+    lat: v.attributes.latitude ?? null,
+    lng: v.attributes.longitude ?? null,
+    eta: null, // we'll merge predictions later
+    delay: 0,
+    speed: v.attributes.speed ?? null,
     status: v.attributes.current_status,
-    updatedAt: v.attributes.updated_at,
   }));
-
-  return lastGoodData;
 }

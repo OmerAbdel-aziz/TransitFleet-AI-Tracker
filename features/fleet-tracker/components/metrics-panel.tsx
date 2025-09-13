@@ -1,12 +1,11 @@
 "use client"
 
-import type React from "react"
-
+import { useEffect, useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
 import { Bus, Clock, MapPin, TrendingUp } from "lucide-react"
 
-// TypeScript interfaces
+// Types
 interface FleetMetric {
   label: string
   value: string | number
@@ -15,54 +14,61 @@ interface FleetMetric {
   color: string
 }
 
-interface MetricsPanelProps {
-  metrics?: FleetMetric[]
-  className?: string
-}
+export function MetricsPanel() {
+  const [metrics, setMetrics] = useState<FleetMetric[] | null>(null)
 
-// Sample delay trend data
-const delayTrendData = [
-  { time: "06:00", delay: 2 },
-  { time: "08:00", delay: 8 },
-  { time: "10:00", delay: 5 },
-  { time: "12:00", delay: 3 },
-  { time: "14:00", delay: 6 },
-  { time: "16:00", delay: 12 },
-  { time: "18:00", delay: 9 },
-  { time: "20:00", delay: 4 },
-]
+  useEffect(() => {
+    fetch("/api/metrics")
+      .then((res) => res.json())
+      .then((data) => {
+        const updated: FleetMetric[] = [
+          {
+            label: "Total Buses",
+            value: data.totalBuses,
+            icon: Bus,
+            trend: "stable",
+            color: "text-[#6939db]",
+          },
+          {
+            label: "Avg Delay",
+            value: `${data.avgDelay} min`,
+            icon: Clock,
+            trend: data.avgDelay > 5 ? "up" : data.avgDelay < 5 ? "down" : "stable",
+            color: data.avgDelay > 5 ? "text-red-600" : "text-green-600",
+          },
+          {
+            label: "Distance Covered",
+            value: data.distanceCovered ? `${data.distanceCovered} km` : "N/A",
+            icon: MapPin,
+            trend: "up",
+            color: "text-blue-600",
+          },
+          {
+            label: "Active Routes",
+            value: data.activeRoutes,
+            icon: TrendingUp,
+            trend: "up",
+            color: "text-orange-600",
+          },
+        ]
+        setMetrics(updated)
+      })
+      .catch(console.error)
+  }, [])
 
-export function MetricsPanel({ className }: MetricsPanelProps) {
-  const metrics: FleetMetric[] = [
-    {
-      label: "Total Buses",
-      value: 12,
-      icon: Bus,
-      trend: "stable",
-      color: "text-[#6939db]",
-    },
-    {
-      label: "Avg Delay",
-      value: "5min",
-      icon: Clock,
-      trend: "down",
-      color: "text-green-600",
-    },
-    {
-      label: "Distance Covered",
-      value: "245km",
-      icon: MapPin,
-      trend: "up",
-      color: "text-blue-600",
-    },
-    {
-      label: "Active Routes",
-      value: 8,
-      icon: TrendingUp,
-      trend: "up",
-      color: "text-orange-600",
-    },
+  // Placeholder delay trend (we’ll replace with real predictions later)
+  const delayTrendData = [
+    { time: "06:00", delay: 2 },
+    { time: "08:00", delay: 8 },
+    { time: "10:00", delay: 5 },
+    { time: "12:00", delay: 3 },
+    { time: "14:00", delay: 6 },
+    { time: "16:00", delay: 12 },
+    { time: "18:00", delay: 9 },
+    { time: "20:00", delay: 4 },
   ]
+
+  if (!metrics) return <p>Loading metrics...</p>
 
   return (
     <div className="space-y-6">
@@ -88,12 +94,16 @@ export function MetricsPanel({ className }: MetricsPanelProps) {
                       metric.trend === "up"
                         ? "text-green-500 rotate-0"
                         : metric.trend === "down"
-                          ? "text-red-500 rotate-180"
-                          : "text-gray-500"
+                        ? "text-red-500 rotate-180"
+                        : "text-gray-500"
                     }`}
                   />
                   <span className="text-xs text-gray-500">
-                    {metric.trend === "up" ? "Increasing" : metric.trend === "down" ? "Decreasing" : "Stable"}
+                    {metric.trend === "up"
+                      ? "Increasing"
+                      : metric.trend === "down"
+                      ? "Decreasing"
+                      : "Stable"}
                   </span>
                 </div>
               )}
@@ -105,7 +115,9 @@ export function MetricsPanel({ className }: MetricsPanelProps) {
       {/* Delay Trend Chart */}
       <Card className="border-[#a78bfa] dark:border-[#6939db]">
         <CardHeader>
-          <CardTitle className="text-lg font-semibold text-gray-900 dark:text-gray-100">Delay Trend Chart</CardTitle>
+          <CardTitle className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+            Delay Trend Chart
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="h-64">

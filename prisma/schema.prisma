@@ -10,13 +10,17 @@ datasource db {
 
 
 
+
 model BusHistory {
   id        String   @id @default(cuid())
   busId     String
   route     String
   lat       Float?
   lng       Float?
-  eta       DateTime
-  delay     Int
-  createdAt DateTime @default(now())
+  eta       DateTime?
+  delay     Int?
+  timestamp DateTime @default(now())
+
+  @@index([busId])
+  @@index([route])
 }
