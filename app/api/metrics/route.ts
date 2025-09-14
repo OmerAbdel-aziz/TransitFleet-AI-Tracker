@@ -13,7 +13,7 @@ export async function GET() {
     const totalBuses = buses.length
     const avgDelay = buses.length
       ? Math.round(
-          buses.reduce((acc, bus) => acc + (bus.delay || 0), 0) / buses.length
+          buses.reduce((acc : any, bus : any) => acc + (bus.delay || 0), 0) / buses.length
         )
       : 0
 

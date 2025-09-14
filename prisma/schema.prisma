@@ -10,7 +10,6 @@ datasource db {
 
 
 
-
 model BusHistory {
   id        String   @id @default(cuid())
   busId     String
@@ -19,8 +18,12 @@ model BusHistory {
   lng       Float?
   eta       DateTime?
   delay     Int?
-  timestamp DateTime @default(now())
 
-  @@index([busId])
+  // Keep original timestamp (maps to createdAt in DB if it already exists)
+  createdAt DateTime @default(now())
+
   @@index([route])
+  @@index([createdAt])
+  @@index([busId, createdAt])
 }
+
