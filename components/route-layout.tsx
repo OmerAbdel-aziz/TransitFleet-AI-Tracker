@@ -4,7 +4,7 @@ import { useState } from "react"
 import { useTheme } from "next-themes"
 import { Button } from "@/components/ui/button"
 import { RouteMap } from "./route-map"
-import { RouteAnalytics } from "@/features/analytics-dashboard/components/routes-analytics"
+import { RouteAnalytics } from "@/components/routes-analytics"
 import { RouteOptimizer } from "./route-optimizer"
 import { Home, Route, FileText, LogOut, Sun, Moon, Menu, X } from "lucide-react"
 

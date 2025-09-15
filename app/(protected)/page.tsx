@@ -1,4 +1,4 @@
-import { DashboardLayout } from "@/features/fleet-tracker/components/dashboard-layout"
+import { DashboardLayout } from "@/components/dashboard-layout"
 
 export default function DashboardPage() {
   return <DashboardLayout />

@@ -4,12 +4,12 @@ import { useState } from "react"
 import { useTheme } from "next-themes"
 import { MapView } from "./map-view"
 import { MetricsPanel } from "./metrics-panel"
-import { PredictionCard } from "@/features/ai-predictions/components/predictions-card"
+import { PredictionCard } from "@/components/predictions-card"
 import { Button } from "@/components/ui/button"
 import { LogOut, Menu, X, Sun, Moon } from "lucide-react"
 import { navigation } from "@/config/navigation"
 import Link from "next/link"
-import { useBusSocket } from "../hooks/useBusSocket"
+import { useBusSocket } from "@/lib/hooks/useBusSocket"
 
 interface DashboardLayoutProps {
   children?: React.ReactNode
@@ -23,7 +23,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   return (
     <div className="min-h-screen bg-background">
       {/* Mobile menu button */}
-      <div className="lg:hidden fixed top-4 left-4 z-50">
+      <div className="lg:hidden fixed top-4 left-4 z-[1010]">
         <Button
           variant="outline"
           size="icon"
@@ -36,7 +36,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
 
       {/* Sidebar */}
       <aside
-        className={`fixed inset-y-0 left-0 z-40 w-64 bg-[#6939db] dark:bg-[#4c1d95] transform transition-transform duration-300 ease-in-out lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-[1020] w-64 bg-[#6939db] dark:bg-[#4c1d95] transform transition-transform duration-300 ease-in-out lg:translate-x-0 ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
@@ -45,7 +45,6 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
             <h1 className="text-xl font-bold text-white">TransitFleet AI</h1>
           </div>
 
-      
           {/* Navigation */}
           <nav className="flex-1 px-4 py-6 space-y-2">
             {navigation.map((item) => (
@@ -64,13 +63,12 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
             ))}
           </nav>
 
-
           <div className="p-4 border-t border-white/10 space-y-2">
             <Button
               variant="ghost"
               size="sm"
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className="w-full justify-center text-white/80 hover:bg-white/10  cursor-pointer "
+              className="w-full justify-center text-white/80 hover:bg-white/10 cursor-pointer"
             >
               {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </Button>
@@ -98,7 +96,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
             </p>
           </div>
 
-          <MapView buses={buses}/>
+          <MapView buses={buses} />
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2">
@@ -115,7 +113,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
 
       {sidebarOpen && (
         <div
-          className="fixed inset-0 z-30 bg-black/50 lg:hidden"
+          className="fixed inset-0 z-[1010] bg-black/50 lg:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}

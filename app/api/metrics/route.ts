@@ -1,12 +1,13 @@
 // app/api/metrics/route.ts
 import { NextResponse } from "next/server"
-import { fetchMbtaBuses } from "@/lib/fetchMbta"
+import { fetchMbtaBusesWithWeather } from "@/lib/fetchMbta"
 import { fetchMbtaRoutes } from "@/lib/fetchMbtaRoutes"
 
 export async function GET() {
   try {
     // Fetch bus data
-    const buses = await fetchMbtaBuses(["1", "15", "22"]) // example routes
+    const buses = await fetchMbtaBusesWithWeather(["1" , "2" , "3" , "4" , "5" , "6" , "7" , "8" , "9" , "10"]);
+    console.log("Metrics Api Route Returned :", buses.length)
     const routes = await fetchMbtaRoutes()
 
     // Calculate metrics

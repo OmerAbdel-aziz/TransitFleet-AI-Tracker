@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Skeleton } from "@/components/ui/skeleton"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
 import { Bus, Clock, MapPin, TrendingUp } from "lucide-react"
 
@@ -68,7 +69,49 @@ export function MetricsPanel() {
     { time: "20:00", delay: 4 },
   ]
 
-  if (!metrics) return <p>Loading metrics...</p>
+  // Skeleton for metrics cards
+  const MetricsSkeleton = () => (
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      {[...Array(4)].map((_, index) => (
+        <Card
+          key={index}
+          className="border-[#a78bfa] dark:border-[#6939db] hover:scale-105 transition-transform duration-200"
+        >
+          <CardContent className="p-4">
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-3/4" />
+              <div className="flex items-center justify-between">
+                <Skeleton className="h-8 w-20" />
+                <Skeleton className="h-8 w-8 rounded-full" />
+              </div>
+              <Skeleton className="h-4 w-1/2" />
+            </div>
+          </CardContent>
+        </Card>
+      ))}
+    </div>
+  )
+
+  // Skeleton for chart
+  const ChartSkeleton = () => (
+    <Card className="border-[#a78bfa] dark:border-[#6939db]">
+      <CardHeader className="pb-3">
+        <Skeleton className="h-6 w-40" />
+      </CardHeader>
+      <CardContent>
+        <Skeleton className="h-64 w-full" />
+      </CardContent>
+    </Card>
+  )
+
+  if (!metrics) {
+    return (
+      <div className="space-y-6">
+        <MetricsSkeleton />
+        <ChartSkeleton />
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-6">
